@@ -20,7 +20,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {cbInstance: window.Chargebee.init({
-      site: "vivek1-test"
+      site: "atarimbilling-test"
     })};
 
     this.state.cbInstance.setPortalSession(() => {
@@ -28,7 +28,7 @@ class App extends Component {
             // Hit your end point that returns portal session object as response
       // This sample end point will call the below api
       // https://apidocs.chargebee.com/docs/api/portal_sessions#create_a_portal_session
-      return axios.post("http://localhost:8000/api/generate_portal_session", urlEncode({})).then((response) => response.data);
+      return axios.post("http://api.atarim.loc/billing/generate-portal-session", urlEncode({})).then((response) => response.data);
     });
 
     this.handleCheckout = this.handleCheckout.bind(this);
@@ -40,7 +40,7 @@ class App extends Component {
   handleCheckout() {
     this.state.cbInstance.openCheckout({
       hostedPage() {
-        return axios.post("http://localhost:8000/api/generate_checkout_new_url", urlEncode({plan_id: "cbdemo_scale"})).then((response) => response.data)
+        return axios.post("http://api.atarim.loc/billing/generate-hosted-page", urlEncode({plan_id: "atarim-monthly-freelancer-10-websites"})).then((response) => response.data)
       },
       success(hostedPageId) {
         console.log(hostedPageId);
@@ -57,7 +57,8 @@ class App extends Component {
   handleCheckoutExisting() {
     this.state.cbInstance.openCheckout({
       hostedPage() {
-        return axios.post("http://localhost:8000/api/generate_checkout_existing_url", urlEncode({plan_id: "cbdemo_scale"})).then((response) => response.data)
+        return axios.post("http://api.atarim.loc/billing/generate-hosted-page", urlEncode({plan_id: "atarim-monthly-freelancer-10-websites"}))
+            .then((response) => response.data)
       },
       success(hostedPageId) {
         console.log(hostedPageId);
@@ -82,7 +83,8 @@ class App extends Component {
   handleUpdatePM() {
     this.state.cbInstance.openCheckout({
       hostedPage() {
-        return axios.post("http://localhost:8000/api/generate_update_payment_method_url", urlEncode({plan_id: "cbdemo_scale"})).then((response) => response.data)
+        return axios.post("http://localhost:8000/api/generate_update_payment_method_url", urlEncode({plan_id: "atarim-monthly-freelancer-10-websites"}))
+            .then((response) => response.data)
       },
       close() {
         console.log("update payment method closed");
